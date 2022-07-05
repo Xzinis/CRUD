@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.springcourse.dao.UserDAO;
+//import ru.springcourse.dao.UserService;
 import ru.springcourse.models.User;
+import ru.springcourse.service.UserService;
 
 import javax.validation.Valid;
 
@@ -14,22 +15,22 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class UserController {
 
-    private final UserDAO UserDAO;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserDAO UserDAO) {
-        this.UserDAO = UserDAO;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("users", UserDAO.index());
+        model.addAttribute("users", userService.index());
         return "users/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("User", UserDAO.show(id));
+        model.addAttribute("User", userService.show(id));
         return "users/show";
     }
 
@@ -40,26 +41,26 @@ public class UserController {
 
     @PostMapping()
     public String create(@ModelAttribute("User") @Valid User user) {
-        UserDAO.save(user);
+        userService.save(user);
         return "redirect:/";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("User", UserDAO.show(id));
+        model.addAttribute("User", userService.show(id));
         return "users/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("User") @Valid User user,
                          @PathVariable("id") int id) {
-        UserDAO.update(id, user);
+        userService.update(id, user);
         return "redirect:/";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        UserDAO.delete(id);
+        userService.delete(id);
         return "redirect:/";
     }
 }

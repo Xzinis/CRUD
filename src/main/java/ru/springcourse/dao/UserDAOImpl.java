@@ -17,40 +17,34 @@ public class UserDAOImpl implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-
-    @Transactional(readOnly = true)
     public List<User> index() {
-        Session session = entityManager.unwrap(Session.class);
+        Session em = entityManager.unwrap(Session.class);
 
-        return session.createQuery("select p from User p", User.class)
+        return em.createQuery("select p from User p", User.class)
                 .getResultList();
     }
 
-    @Transactional(readOnly = true)
     public User show(int id) {
-        Session session = entityManager.unwrap(Session.class);
-        return session.get(User.class, id);
+        Session em = entityManager.unwrap(Session.class);
+        return em.get(User.class, id);
     }
 
-    @Transactional
     public void save(User user) {
-        Session session = entityManager.unwrap(Session.class);
-        session.save(user);
+        Session em = entityManager.unwrap(Session.class);
+        em.persist(user);
     }
 
-    @Transactional
     public void update(int id, User updatedUser) {
-        Session session = entityManager.unwrap(Session.class);
-        User userToBeUpdated = session.get(User.class, id);
+        Session em = entityManager.unwrap(Session.class);
+        User userToBeUpdated = em.get(User.class, id);
 
         userToBeUpdated.setName(updatedUser.getName());
         userToBeUpdated.setAge(updatedUser.getAge());
         userToBeUpdated.setEmail(updatedUser.getEmail());
     }
 
-    @Transactional
     public void delete(int id) {
-        Session session = entityManager.unwrap(Session.class);
-        session.remove(session.get(User.class, id));
+        Session em = entityManager.unwrap(Session.class);
+        em.remove(em.get(User.class, id));
     }
 }
