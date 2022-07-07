@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface UserDAO {
 
-    List<User> index();
+    List<User> findAll();
     User show(int id);
     void save(User user);
-    void update(int id, User updatedUser);
+    void update(User user);
     void delete(int id);
 
 

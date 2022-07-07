@@ -1,13 +1,10 @@
 package ru.springcourse.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-//import ru.springcourse.dao.UserService;
 import ru.springcourse.models.User;
 import ru.springcourse.service.UserService;
-
 import javax.validation.Valid;
 
 
@@ -17,14 +14,13 @@ public class UserController {
 
     private UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("users", userService.index());
+        model.addAttribute("users", userService.findAll());
         return "users/index";
     }
 
@@ -52,9 +48,9 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("User") @Valid User user,
-                         @PathVariable("id") int id) {
-        userService.update(id, user);
+    public String update(@ModelAttribute("User") @Valid User user
+                        ) {
+        userService.update(user);
         return "redirect:/";
     }
 
